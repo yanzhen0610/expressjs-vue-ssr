@@ -1,0 +1,20 @@
+{
+    "home_page": "Home Page",
+    "login": "Login",
+    "logout": "Logout",
+    "page_not_found": "Page Not Found",
+    "redirecting_to_home_page": "Redirecting to home page",
+    "username": "Username",
+    "password": "Password",
+    "login_form": "Login Form",
+    "logged_in_successfully": "Logged In Successfully",
+    "logged_in_with": "Logged In With: {display_name}({username})",
+    "login_failed": "Failed to login.",
+    "logged_out_successfully": "Logged Out",
+    "error_code": {
+        "incorrect_username_or_password": "Incorrect Username or Password.",
+        "server_error": "Server Error",
+        "bad_request": "Bad Request"
+    },
+    "unknown_reason": "Unknown Reason"
+}
