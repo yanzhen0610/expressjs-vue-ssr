@@ -1,6 +1,6 @@
 # Vue SSR Simple Setup
 
-> [Medium article](https://medium.com/namecheap-engineering/production-ready-vue-ssr-in-5-simple-steps-39d171904150)
+> Modified from [Medium article](https://medium.com/namecheap-engineering/production-ready-vue-ssr-in-5-simple-steps-39d171904150)
 
 This repo is an example of SSR setup for Vue.js application using:
 
