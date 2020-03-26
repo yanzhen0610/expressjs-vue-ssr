@@ -2,20 +2,29 @@
   <el-menu v-bind:router="true" mode="horizontal">
     <div class="navbar">
       <div class="menu-left">
-        <el-menu-item
-          v-bind:index="$router.resolve({ name: 'home' }).route.path"
-          v-bind:route="{ name: 'home' }"
-        >{{ $t('home_page') }}</el-menu-item>
+        <router-link v-bind:to="{ name: 'home' }">
+          <el-menu-item
+            v-bind:index="$router.resolve({ name: 'home' }).route.path"
+            v-bind:route="{ name: 'home' }"
+          >
+            {{ $t("home_page") }}
+          </el-menu-item>
+        </router-link>
       </div>
       <div class="menu-right">
-        <el-menu-item
-          v-if="!user"
-          v-bind:index="$router.resolve({ name: 'login' }).route.path"
-          v-bind:route="{ name: 'login' }"
-        >{{ $t('login') }}</el-menu-item>
+        <router-link v-if="!user" v-bind:to="{ name: 'login' }">
+          <el-menu-item
+            v-bind:index="$router.resolve({ name: 'login' }).route.path"
+            v-bind:route="{ name: 'login' }"
+          >
+            {{ $t("login") }}
+          </el-menu-item>
+        </router-link>
         <el-submenu v-else index="user_menu">
-          <template slot="title">{{ user.display_name || user.username }}</template>
-          <el-menu-item @click="logout">{{ $t('logout') }}</el-menu-item>
+          <template slot="title">{{
+            user.display_name || user.username
+          }}</template>
+          <el-menu-item @click="logout">{{ $t("logout") }}</el-menu-item>
         </el-submenu>
       </div>
     </div>
@@ -25,6 +34,11 @@
 <style lang="scss" scoped>
 .navbar {
   position: relative;
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
 
   .menu-left {
     float: left;
