@@ -1,14 +1,40 @@
 const fs = require('fs');
+const fsPromises = require('fs/promises');
 const path = require('path');
 const config = require('../config');
 const vueServerRenderer = require('vue-server-renderer');
-const bundle = require('../dist/vue-ssr-server-bundle.json');
-const manifest = require('../dist/manifest.json');
 
-const renderer = vueServerRenderer.createBundleRenderer(bundle, {
+const bundlePath = path.resolve(__dirname, '..', 'dist', 'vue-ssr-server-bundle.json');
+const manifestPath = path.resolve(__dirname, '..', 'dist', 'manifest.json');
+
+const createRenderer = async bundle => vueServerRenderer.createBundleRenderer(bundle, {
   runInNewContext: 'once',
-  template: fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf-8'),
+  template: await fsPromises.readFile(path.resolve(__dirname, '..', 'index.html'), 'utf-8'),
 });
+
+// might be updated later if it's in development mode
+let bundle = require('../dist/vue-ssr-server-bundle.json');
+let manifest = require('../dist/manifest.json');
+
+// renderer might be changed if in development mode
+let renderer = null;
+
+// calling async function
+(async () => renderer = await createRenderer(bundle))();
+
+// Watch for changes
+if (process.env.NODE_ENV == 'development') {
+  fs.watchFile(bundlePath, async () => {
+    bundle = JSON.parse(await fsPromises.readFile(bundlePath, { encoding: 'utf8' }));
+    renderer = await createRenderer(bundle);
+    console.info('Renderer updated');
+  });
+
+  fs.watchFile(manifestPath, async () => {
+    manifest = JSON.parse(await fsPromises.readFile(manifestPath, { encoding: 'utf8' }));
+    console.info('Manifest updated');
+  });
+}
 
 async function spa(req, res) {
   const context = {
