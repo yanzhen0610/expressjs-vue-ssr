@@ -53,22 +53,33 @@ async function spa(req, res) {
   try {
     res.send(await renderer.renderToString(context));
   } catch (error) {
-    res.status(error.code < 500 ? error.code : 500);
-    if (error.code == 307) {
-      return res.redirect(307, error.location);
+    // 5xx Server Error
+    if (error.code === undefined || error.code >= 500) {
+      console.error(error);
+      try {
+        context.url = context.path = '/500';
+        return res.status(500).send(await renderer.renderToString(context));
+      } catch {
+        return res.status(500).end();
+      }
     }
+
+    // 3xx Redirection
+    if (error.code >= 300 && error.code < 400) {
+      return res.redirect(error.code, error.location);
+    }
+
     if (error.code == 404) {
       // show 404 page
       try {
         context.url = context.path = '/404';
         return res.send(await renderer.renderToString(context));
       } catch {
-        res.status(500);
+        return res.status(404).end();
       }
-    } else if (error.code === undefined || error.code >= 500) {
-      console.error(error);
     }
-    return res.end();
+
+    return res.status(error.code).end();
   }
 }
 
