@@ -3,6 +3,7 @@ const fsPromises = require('fs/promises');
 const path = require('path');
 const config = require('../config');
 const vueServerRenderer = require('vue-server-renderer');
+const toIso8601String = require('../utils/toIso8601String');
 
 const bundlePath = path.resolve(__dirname, '..', 'dist', 'vue-ssr-server-bundle.json');
 const manifestPath = path.resolve(__dirname, '..', 'dist', 'manifest.json');
@@ -27,12 +28,12 @@ if (process.env.NODE_ENV == 'development') {
   fs.watchFile(bundlePath, async () => {
     bundle = JSON.parse(await fsPromises.readFile(bundlePath, { encoding: 'utf8' }));
     renderer = await createRenderer(bundle);
-    console.info('Renderer updated');
+    console.info(`[${toIso8601String(new Date)}] Renderer updated`);
   });
 
   fs.watchFile(manifestPath, async () => {
     manifest = JSON.parse(await fsPromises.readFile(manifestPath, { encoding: 'utf8' }));
-    console.info('Manifest updated');
+    console.info(`[${toIso8601String(new Date)}] Manifest updated`);
   });
 }
 

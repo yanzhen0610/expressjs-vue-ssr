@@ -1,5 +1,7 @@
+const toIso8601String = require('../utils/toIso8601String');
+
 module.exports = function log(req, res, next) {
-  const timestamp = (new Date()).toISOString();
+  const timestamp = toIso8601String(new Date);
   const start = Date.now();
   const remote = req.socket.remoteAddress;
   const method = req.method;
