@@ -1,6 +1,11 @@
 module.exports = function mergeInput(req, res, next) {
   let input = {};
 
+  // if it's already exists
+  if (req.input) {
+    input = req.input;
+  }
+
   // merge from url query string
   input = Object.assign(input, req.query);
 
