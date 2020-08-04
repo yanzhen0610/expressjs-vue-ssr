@@ -12,15 +12,13 @@ const router = express.Router();
 router.use(middleware('log'));
 router.use(middleware('parse-cookie'));
 router.use(middleware('session'));
-router.use(middleware('parse-body-json'));
-router.use(middleware('parse-body-urlencoded'));
-router.use(middleware('merge-input'));
 
 // sub router
 router.use('/api', routerFor('api'));
 router.use('/public', routerFor('public'));
 
 // spa
+router.get('*', middleware('log'));
 router.get('*', controller('spa'));
 
 // error handler (must be the last)
