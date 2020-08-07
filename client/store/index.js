@@ -16,8 +16,12 @@ export default context => {
       modules[name] = module;
       return modules;
     }, {});
-  return new Vuex.Store({
-    state: JSON.parse(JSON.stringify(context.state)),
-    modules,
-  });
+
+  const store = new Vuex.Store({ modules });
+
+  if (context.state) {
+    store.replaceState(JSON.parse(JSON.stringify(context.state)));
+  }
+
+  return store;
 };
