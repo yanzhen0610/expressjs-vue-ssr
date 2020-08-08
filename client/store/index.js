@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import fetch from '../utils/fetch-require-context-modules';
+import _ from 'lodash';
 
 Vue.use(Vuex);
 
@@ -20,7 +21,14 @@ export default context => {
   const store = new Vuex.Store({ modules });
 
   if (context.state) {
-    store.replaceState(JSON.parse(JSON.stringify(context.state)));
+    // Prevent from getters are not updating
+    // due to some state keys are missing
+    // e.g. JSON.stringify({ axios: axios.create() }) // "{}"
+    const state = _.merge(store.state, context.state);
+
+    // Clone the state object to avoid malicious scripts
+    // is modifying the `window.__INITIAL_STATE__`
+    store.replaceState(JSON.parse(JSON.stringify(state)));
   }
 
   return store;
